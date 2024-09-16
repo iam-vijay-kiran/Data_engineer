@@ -1,0 +1,32 @@
+create table tickets
+(
+ticket_id varchar(10),
+create_date date,
+resolved_date date
+);
+
+insert into tickets values
+(1,'2022-08-01','2022-08-03')
+,(2,'2022-08-01','2022-08-12')
+,(3,'2022-08-01','2022-08-16');
+create table holidays
+(
+holiday_date date
+,reason varchar(100)
+);
+
+insert into holidays values
+('2022-08-11','Rakhi'),('2022-08-15','Independence day'); */
+
+SELECT * from tickets;
+SELECT * from holidays;
+
+WITH holidays_count AS (
+SELECT t.ticket_id,t.create_date,t.resolved_date, COUNT(h.holiday_date) as no_of_holidays
+from tickets t
+LEFT JOIN holidays h ON h.holiday_date BETWEEN t.create_date AND t.resolved_date AND 
+(DAYOFWEEK(h.holiday_date)!='Sunday' OR DAYOFWEEK(h.holiday_date)!='Saturday' )
+GROUP BY t.ticket_id,t.create_date,t.resolved_date
+) 
+SELECT *, DATEDIFF(day,create_date,resolved_date)-2*DATEDIFF(week,create_date,resolved_date)- no_of_holidays as business_days
+FROM holidays_count ;
