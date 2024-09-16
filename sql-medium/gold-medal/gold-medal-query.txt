@@ -1,0 +1,5 @@
+SELECT Gold AS player, COUNT(*) AS no_of_gold FROM events
+WHERE Gold NOT IN (
+SELECT silver,bronze
+FROM events)
+GROUP BY Gold;
